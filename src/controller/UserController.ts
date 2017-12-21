@@ -1,9 +1,12 @@
 import {
   Get,
   JsonController,
-  Patch,
-  Post as HttpPost,
-  Controller
+  Req,
+  // Patch,
+  Post,
+  Body,
+  // BodyParam,
+  // Controller
 } from "routing-controllers";
 import {
   getConnectionManager,
@@ -12,11 +15,6 @@ import {
 import {
   User
 } from "../entity/User";
-import {
-  EntityFromParam,
-  EntityFromBody,
-  EntityFromBodyParam
-} from "typeorm-routing-controllers-extensions";
 
 @JsonController()
 export class UserController {
@@ -26,10 +24,14 @@ export class UserController {
   constructor() {
     this.userRepository = getConnectionManager().get().getRepository(User);
   }
-
+  /**
+   * 获取用户信息
+   * @param request {id,username,password,email} 
+   */
   @Get("/users")
-  async getAll() {
-    const user = await this.userRepository.find();
+  async getAll(@Req() request: any) {
+    const user = await this.userRepository.find(request.query);
+    // console.log(request.query.id);
     if (user) {
       return {
         code: 0,
@@ -42,28 +44,13 @@ export class UserController {
     };
   }
 
-  @Get("/user/:id")
-  get(@EntityFromParam("id") user: User) {
-    if (user) {
-      return {
-        code: 0,
-        user,
-      }
-    }
+  @Post('/users/add')
+  async addUser(@Body() user: User){
+    const data = await this.userRepository.save(user);
+    // console.log(user);
     return {
-      code: -1,
-      user: null
-    };
+      code: 0,
+      data,
+    }
   }
-
-  // @HttpPost("/posts")
-  // save(@EntityFromBody() post: Post) {
-  //   return this.userRepository.save(post);
-  // }
-
-  // @Patch("/posts")
-  // patch(@EntityFromBodyParam("post1") post1: Post, @EntityFromBodyParam("post2") post2: Post) {
-  //   return this.userRepository.save([post1, post2]);
-  // }
-
 }

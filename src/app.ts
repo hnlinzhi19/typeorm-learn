@@ -9,12 +9,9 @@ import {
   Container
 } from "typedi";
 import {
-  createExpressServer,
+  // createExpressServer,
   useExpressServer
 } from "routing-controllers";
-import {
-  PostController
-} from "./controller/PostController";
 import {
   UserController
 } from "./controller/UserController";
@@ -30,7 +27,7 @@ createConnection({
   entities: [__dirname + "/entity/*.js"],
   synchronize: true,
   logging: true
-}).then(async connection => {
+}).then(async () => {
   const app = express();
   // 静态 资源
   // app.use(express.static(path.join(__dirname, 'static')));
@@ -40,7 +37,7 @@ createConnection({
   // 路由
   useExpressServer(app, {
     routePrefix: "/api",
-    controllers: [PostController, UserController]
+    controllers: [UserController]
   });
   app.listen(3000);
   console.log("Server is up and running on port 3000. Now send requests to check if everything works.");

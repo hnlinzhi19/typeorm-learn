@@ -7,8 +7,7 @@
     "reflect-metadata": "^0.1.10",
     "routing-controllers": "^0.7.6",
     "typedi": "^0.6.0",
-    "typeorm": "^0.1.9",
-    "typeorm-routing-controllers-extensions": "^0.1.0"
+    "typeorm": "^0.1.9"
   },
   "scripts": {
     "start": "node dist/app.js"
