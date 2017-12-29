@@ -15,31 +15,37 @@ import {
 import {
   UserController
 } from "./controller/UserController";
+import {
+  InfoController,
+} from "./controller/InfoController";
 
 useContainer(Container);
-createConnection({
-  type: "mysql",
-  host: "localhost",
-  port: 3306,
-  username: "root",
-  password: "5246114",
-  database: "linz",
-  entities: [__dirname + "/entity/*.js"],
-  synchronize: true,
-  logging: true
-}).then(async () => {
+
+(async() => {
+  // 链接数据库
+  await createConnection({
+    type: "mysql",
+    host: "localhost",
+    port: 3306,
+    username: "root",
+    password: "5246114",
+    database: "linz",
+    entities: [__dirname + "/entity/*.js"],
+    synchronize: true,
+    logging: true
+  });
+  // 创建 service
   const app = express();
   // 静态 资源
-  // app.use(express.static(path.join(__dirname, 'static')));
   app.use(express.static(path.join(__dirname, '../static')));
-  console.log("Connected. Now run express app");
-  
-  // 路由
+
+  // api 路由
   useExpressServer(app, {
     routePrefix: "/api",
-    controllers: [UserController]
+    controllers: [UserController,InfoController]
   });
+  // 监听端口
   app.listen(3000);
+  // 打印log 
   console.log("Server is up and running on port 3000. Now send requests to check if everything works.");
-
-}).catch(error => console.log("Error: ", error));
+})();

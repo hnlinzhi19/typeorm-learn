@@ -1,8 +1,11 @@
 import {
   Column,
   Entity,
-  PrimaryGeneratedColumn
+  PrimaryGeneratedColumn,
+  OneToOne, JoinColumn,
 } from "typeorm";
+
+import {Info} from './Info';
 
 @Entity('user')
 export class User {
@@ -25,4 +28,8 @@ export class User {
     length: 50
   })
   email: string;
+  // tslint:disable-next-line
+  @OneToOne(() => Info) 
+  @JoinColumn()
+  info: Info;
 }
