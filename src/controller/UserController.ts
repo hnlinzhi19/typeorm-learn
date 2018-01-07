@@ -10,10 +10,10 @@ import {
 } from "routing-controllers";
 import {
   getConnectionManager,
-  Repository
+  Repository,
 } from "typeorm";
 import {
-  User
+  User,
 } from "../entity/User";
 import {
   Info,
@@ -31,37 +31,36 @@ export class UserController {
   }
   /**
    * 获取用户信息
-   * @param request {id,username,password,email} 
+   * @param request {id,username,password,email}
    */
   @Get("/users")
-  async getAll(@Req() request: any) {
-    
-    const user = await this.userRepository.find(Object.assign({}, request.query, {relations: ['info']}));
+  public async getAll(@Req() request: any) {
+    const user = await this.userRepository.find(Object.assign({}, request.query, {relations: ["info"]}));
     // console.log(request.query.id);
     if (user) {
       return {
         code: 0,
         user,
-      }
+      };
     }
     return {
       code: -1,
-      user: null
+      user: null,
     };
   }
 
-  @Post('/users/add')
-  async addUser(@Body() user: User){
-    const nowInfo:Info = new Info();
-    nowInfo.comment = '没有 test';
+  @Post("/users/add")
+  public async addUser(@Body() user: User) {
+    const nowInfo: Info = new Info();
+    nowInfo.comment = "没有 test";
     user.info = nowInfo;
     await this.infoRepository.save(nowInfo);
-    
+
     const data = await this.userRepository.save(user);
     // console.log(user);
     return {
       code: 0,
       data,
-    }
+    };
   }
 }
